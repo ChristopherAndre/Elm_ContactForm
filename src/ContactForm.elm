@@ -146,20 +146,20 @@ nameField : Maybe String -> Html Msg
 nameField nameFieldValue =
     case nameFieldValue of
         Just value ->
-            getFlowControl "Name" "Please enter your name" value
+            getFlowControl "Name" "Please enter your name" value (\newName -> Name (Just newName))
 
         Nothing ->
-            getFlowControl "Name" "Please enter your name" ""
+            getFlowControl "Name" "Please enter your name" "" (\newName -> Name (Just newName))
 
 
 emailField : Maybe String -> Html Msg
 emailField emailFieldValue =
     case emailFieldValue of
         Just value ->
-            getFlowControl "Email" "Please enter your email (we need this to contact you back!)" value
+            getFlowControl "Email" "Please enter your email (we need this to contact you back!)" value (\newName -> Email (Just newName))
 
         Nothing ->
-            getFlowControl "Email" "Please enter your email (we need this to contact you back!)" ""
+            getFlowControl "Email" "Please enter your email (we need this to contact you back!)" "" (\newName -> Email (Just newName))
 
 
 messageField : Maybe String -> Html Msg
@@ -195,11 +195,11 @@ getSubmissionResult model =
         model.formSubmissionResult
 
 
-getFlowControl : String -> String -> String -> Html Msg
-getFlowControl labelText placeholderText currentValue =
+getFlowControl : String -> String -> String -> (String -> Msg) -> Html Msg
+getFlowControl labelText placeholderText currentValue onInputAction =
     Form.group []
         [ Form.label [ class "col-sm-2 control-label" ] [ text labelText ]
-        , Input.text [ Input.attrs [ value currentValue, class "col-sm-9", placeholder placeholderText ] ]
+        , Input.text [ Input.onInput onInputAction, Input.attrs [ value currentValue, class "col-sm-9", placeholder placeholderText ] ]
         ]
 
 
